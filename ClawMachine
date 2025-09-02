@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎁 Happy Birthday Claw Machine! 🎁</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            color: white;
+        }
+
+        .game-title {
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .game-subtitle {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            text-align: center;
+            opacity: 0.9;
+        }
+
+        .game-container {
+            background: linear-gradient(145deg, #ff6b6b, #ee5a24);
+            border: 8px solid #2c2c2c;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        canvas {
+            background: #87CEEB;
+            border: 4px solid #2c2c2c;
+            border-radius: 10px;
+            display: block;
+        }
+
+        .controls {
+            margin-top: 20px;
+            text-align: center;
+            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .control-info {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .mobile-controls {
+            display: none;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .control-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .control-btn:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        .control-btn:active {
+            transform: scale(0.95);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .prize-display {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .collected-prizes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-controls {
+                display: grid;
+            }
+            .game-title {
+                font-size: 2em;
+            }
+            canvas {
+                width: 100%;
+                height: auto;
+            }
+        }
+
+        .instructions {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            max-width: 600px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-title">🎁 Happy Birthday! 🎁</div>
+    <div class="game-subtitle">Your Personal Claw Machine Adventure!</div>
+    
+    <div class="game-container">
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        
+        <div class="controls">
+            <div class="control-info">🎮 SPACE: Drop/Grab/Deliver | Arrows: Move</div>
+            
+            <div style="margin: 15px 0;">
+                <label style="margin-right: 15px;">
+                    <input type="radio" name="difficulty" value="casual" checked> 
+                    <span style="color: #90EE90; font-weight: bold;">🟢 Casual</span>
+                </label>
+                <label style="margin-right: 15px;">
+                    <input type="radio" name="difficulty" value="professional"> 
+                    <span style="color: #FFD700; font-weight: bold;">🟡 Professional</span>
+                </label>
+                <label>
+                    <input type="radio" name="difficulty" value="extreme"> 
+                    <span style="color: #FF4500; font-weight: bold;">🔥 EXTREME</span>
+                </label>
+            </div>
+            
+            <div class="mobile-controls" id="mobileControls">
+                <div></div>
+                <button class="control-btn" id="upBtn">⬆️</button>
+                <div></div>
+                <button class="control-btn" id="leftBtn">⬅️</button>
+                <button class="control-btn" id="dropBtn">🎯 DROP</button>
+                <button class="control-btn" id="rightBtn">➡️</button>
+                <div></div>
+                <button class="control-btn" id="downBtn">⬇️</button>
+                <div></div>
+            </div>
+            
+            <div class="stats">
+                <div>💰 Credits: <span id="credits">10</span></div>
+                <div>🏆 Prizes Won: <span id="prizesWon">0</span></div>
+            </div>
+        </div>
+        
+        <div class="prize-display">
+            <div style="font-size: 1.2em; margin-bottom: 10px;">🎁 Collected Prizes:</div>
+            <div class="collected-prizes" id="collectedPrizes"></div>
+        </div>
+    </div>
+
+    <div class="instructions">
+        <strong>🎯 How to Play:</strong><br>
+        1. Move the claw with arrow keys<br>
+        2. Press SPACE to start dropping<br>
+        3. Press SPACE again to stop and grab!<br>
+        4. Carry prize over the BUCKET and press SPACE to drop it in!<br><br>
+        <strong>🎮 Difficulty Modes:</strong><br>
+        <span style="color: #90EE90;">🟢 Casual:</span> 20px grab area, 15% slip chance<br>
+        <span style="color: #FFD700;">🟡 Professional:</span> 16px grab area, wind effects (locked during drop), 25% slip chance<br>
+        <span style="color: #FF4500;">🔥 EXTREME:</span> 14px precision, dynamic wind, 30% slip chance!<br><br>
+        <em>💡 Pro tip: To personalize this game, replace the prize images with photos of your friend!</em>
+    </div>
+
+    <script>
+        console.log("Script loading...");
+        
+        class ClawMachineGame {
+            constructor() {
+                console.log("Game constructor starting...");
+                
+                this.canvas = document.getElementById('gameCanvas');
+                if (!this.canvas) {
+                    console.error("Canvas not found!");
+                    return;
+                }
+                
+                this.ctx = this.canvas.getContext('2d');
+                if (!this.ctx) {
+                    console.error("Canvas context not found!");
+                    return;
+                }
+                
+                console.log("Canvas found:", this.canvas.width, "x", this.canvas.height);
+                
+                // Game state
+                this.credits = 10;
+                this.prizesWon = 0;
+                this.collectedPrizes = [];
+                this.gameActive = true;
+                this.difficulty = 'casual';
+                this.gamePhase = 'positioning';
+                
+                // Claw properties
+                this.claw = {
+                    x: 400,
+                    y: 80,
+                    width: 60,
+                    height: 40,
+                    isDropping: false,
+                    isGrabbing: false,
+                    isReturning: false,
+                    isCarrying: false,
+                    dropSpeed: 4,
+                    returnSpeed: 5,
+                    originalY: 80,
+                    grabbedPrize: null
+                };
+                
+                // Drop zone - bucket at bottom right
+                this.dropZone = {
+                    x: 650,
+                    y: 500,
+                    width: 120,
+                    height: 80
+                };
+                
+                // Create prizes
+                this.createPrizes();
+                
+                // Wind system
+                this.windDirection = 0;
+                this.windStrength = 0;
+                this.windChangeTimer = 0;
+                this.clawSway = 0;
+                this.windLocked = false;
+                
+                this.keys = {};
+                this.setupEventListeners();
+                
+                console.log("Starting game loop...");
+                this.gameLoop();
+                
+                // Test draw immediately
+                this.draw();
+                console.log("Initial draw complete");
+            }
+            
+            createPrizes() {
+                this.prizes = [
+                    { x: 100, y: 450, width: 45, height: 45, color: '#FF69B4', emoji: '🎂', name: 'Birthday Cake', collected: false, weight: 0.8, falling: false, fallSpeed: 0 },
+                    { x: 200, y: 440, width: 50, height: 50, color: '#FFD700', emoji: '🎈', name: 'Balloon', collected: false, weight: 0.3, falling: false, fallSpeed: 0 },
+                    { x: 300, y: 460, width: 45, height: 45, color: '#FF6347', emoji: '🎁', name: 'Present', collected: false, weight: 0.9, falling: false, fallSpeed: 0 },
+                    { x: 400, y: 450, width: 50, height: 50, color: '#98FB98', emoji: '🌟', name: 'Star', collected: false, weight: 0.6, falling: false, fallSpeed: 0 },
+                    { x: 500, y: 440, width: 45, height: 45, color: '#DDA0DD', emoji: '💝', name: 'Love', collected: false, weight: 0.7, falling: false, fallSpeed: 0 },
+                    
+                    { x: 150, y: 380, width: 40, height: 50, color: '#87CEEB', emoji: '🦄', name: 'Unicorn', collected: false, weight: 0.5, falling: false, fallSpeed: 0 },
+                    { x: 280, y: 370, width: 48, height: 48, color: '#FFA07A', emoji: '🍰', name: 'Slice of Cake', collected: false, weight: 0.8, falling: false, fallSpeed: 0 },
+                    { x: 420, y: 380, width: 42, height: 42, color: '#F0E68C', emoji: '✨', name: 'Sparkle', collected: false, weight: 0.4, falling: false, fallSpeed: 0 },
+                    { x: 550, y: 370, width: 50, height: 50, color: '#FFB6C1', emoji: '🎪', name: 'Fun Times', collected: false, weight: 0.6, falling: false, fallSpeed: 0 },
+                    
+                    { x: 120, y: 300, width: 45, height: 45, color: '#FF4500', emoji: '🔥', name: 'Fire', collected: false, weight: 0.9, falling: false, fallSpeed: 0 },
+                    { x: 250, y: 290, width: 40, height: 55, color: '#32CD32', emoji: '🍀', name: 'Lucky Clover', collected: false, weight: 0.3, falling: false, fallSpeed: 0 },
+                    { x: 380, y: 300, width: 48, height: 42, color: '#8A2BE2', emoji: '💎', name: 'Diamond', collected: false, weight: 1.0, falling: false, fallSpeed: 0 },
+                    { x: 480, y: 290, width: 40, height: 50, color: '#FF1493', emoji: '🌹', name: 'Rose', collected: false, weight: 0.5, falling: false, fallSpeed: 0 },
+                    { x: 600, y: 300, width: 45, height: 45, color: '#00CED1', emoji: '🐠', name: 'Fish', collected: false, weight: 0.4, falling: false, fallSpeed: 0 },
+                    
+                    { x: 180, y: 420, width: 38, height: 38, color: '#FFB347', emoji: '🧸', name: 'Teddy Bear', collected: false, weight: 0.7, falling: false, fallSpeed: 0 },
+                    { x: 350, y: 430, width: 42, height: 40, color: '#DEB887', emoji: '🎭', name: 'Mask', collected: false, weight: 0.6, falling: false, fallSpeed: 0 },
+                    { x: 320, y: 340, width: 40, height: 45, color: '#FF69B4', emoji: '🎨', name: 'Art', collected: false, weight: 0.5, falling: false, fallSpeed: 0 },
+                    { x: 520, y: 330, width: 38, height: 42, color: '#20B2AA', emoji: '🎵', name: 'Music', collected: false, weight: 0.4, falling: false, fallSpeed: 0 }
+                ];
+                console.log("Created", this.prizes.length, "prizes");
+            }
+            
+            setupEventListeners() {
+                document.addEventListener('keydown', (e) => {
+                    this.keys[e.code] = true;
+                    if (e.code === 'Space') {
+                        e.preventDefault();
+                        this.handleClawAction();
+                    }
+                });
+                
+                document.addEventListener('keyup', (e) => {
+                    this.keys[e.code] = false;
+                });
+                
+                document.getElementById('leftBtn').addEventListener('click', () => this.moveClaw(-1, 0));
+                document.getElementById('rightBtn').addEventListener('click', () => this.moveClaw(1, 0));
+                document.getElementById('upBtn').addEventListener('click', () => this.moveClaw(0, -1));
+                document.getElementById('downBtn').addEventListener('click', () => this.moveClaw(0, 1));
+                document.getElementById('dropBtn').addEventListener('click', () => this.handleClawAction());
+                
+                document.querySelectorAll('input[name="difficulty"]').forEach(radio => {
+                    radio.addEventListener('change', (e) => {
+                        this.difficulty = e.target.value;
+                    });
+                });
+                
+                if ('ontouchstart' in window) {
+                    document.getElementById('mobileControls').style.display = 'grid';
+                }
+                
+                console.log("Event listeners set up");
+            }
+            
+            moveClaw(dx, dy, speed = 6) {
+                if (this.gamePhase === 'positioning' || this.gamePhase === 'carrying') {
+                    this.claw.x += dx * speed;
+                    this.claw.y += dy * 4;
+                    
+                    this.claw.x = Math.max(50, Math.min(this.canvas.width - 50, this.claw.x));
+                    this.claw.y = Math.max(50, Math.min(150, this.claw.y));
+                }
+            }
+            
+            handleClawAction() {
+                if (this.credits <= 0 || !this.gameActive) return;
+                
+                if (this.gamePhase === 'positioning') {
+                    this.startDrop();
+                } else if (this.gamePhase === 'dropping') {
+                    this.startGrab();
+                } else if (this.gamePhase === 'carrying') {
+                    this.attemptDelivery();
+                }
+            }
+            
+            startDrop() {
+                this.claw.isDropping = true;
+                this.gamePhase = 'dropping';
+                this.credits--;
+                this.updateStats();
+                
+                if (this.difficulty === 'professional') {
+                    this.windLocked = true;
+                }
+            }
+            
+            startGrab() {
+                this.claw.isDropping = false;
+                this.claw.isGrabbing = true;
+                this.checkPrizeGrab();
+                
+                setTimeout(() => {
+                    this.claw.isGrabbing = false;
+                    this.claw.isReturning = true;
+                }, 500);
+            }
+            
+            attemptDelivery() {
+                if (this.claw.x >= this.dropZone.x && 
+                    this.claw.x <= this.dropZone.x + this.dropZone.width &&
+                    this.claw.grabbedPrize) {
+                    
+                    const prize = this.claw.grabbedPrize;
+                    prize.falling = true;
+                    prize.fallSpeed = 0;
+                    prize.x = this.claw.x - prize.width / 2;
+                    prize.y = this.claw.y + this.claw.height;
+                    
+                    this.claw.grabbedPrize = null;
+                    this.claw.isCarrying = false;
+                    this.gamePhase = 'positioning';
+                }
+            }
+            
+            update() {
+                let moveSpeed = 6;
+                if (this.difficulty === 'professional' || this.difficulty === 'extreme') {
+                    this.updateWind();
+                    moveSpeed += this.clawSway;
+                }
+                
+                if (this.keys['ArrowLeft']) this.moveClaw(-1, 0, moveSpeed);
+                if (this.keys['ArrowRight']) this.moveClaw(1, 0, moveSpeed);
+                if (this.keys['ArrowUp']) this.moveClaw(0, -1, moveSpeed);
+                if (this.keys['ArrowDown']) this.moveClaw(0, 1, moveSpeed);
+                
+                if (this.claw.isDropping) {
+                    this.claw.y += this.claw.dropSpeed;
+                    
+                    if ((this.difficulty === 'professional' || this.difficulty === 'extreme') && this.windStrength > 0) {
+                        this.claw.x += this.windDirection * this.windStrength * 0.8;
+                        this.claw.x = Math.max(50, Math.min(this.canvas.width - 50, this.claw.x));
+                    }
+                    
+                    if (this.claw.y >= 480) {
+                        this.claw.isDropping = false;
+                        this.claw.isReturning = true;
+                        this.gamePhase = 'positioning';
+                        this.windLocked = false;
+                    }
+                }
+                
+                if (this.claw.isReturning) {
+                    this.claw.y -= this.claw.returnSpeed;
+                    
+                    if (this.claw.grabbedPrize) {
+                        this.claw.grabbedPrize.x = this.claw.x - this.claw.grabbedPrize.width / 2;
+                        this.claw.grabbedPrize.y = this.claw.y + this.claw.height;
+                    }
+                    
+                    if (this.claw.y <= this.claw.originalY) {
+                        this.claw.y = this.claw.originalY;
+                        this.claw.isReturning = false;
+                        
+                        if (this.claw.grabbedPrize) {
+                            this.claw.isCarrying = true;
+                            this.gamePhase = 'carrying';
+                        } else {
+                            this.gamePhase = 'positioning';
+                        }
+                        this.windLocked = false;
+                    }
+                }
+                
+                if (this.claw.isCarrying && this.claw.grabbedPrize) {
+                    this.claw.grabbedPrize.x = this.claw.x - this.claw.grabbedPrize.width / 2;
+                    this.claw.grabbedPrize.y = this.claw.y + this.claw.height;
+                    
+                    let slipChance;
+                    switch(this.difficulty) {
+                        case 'casual': slipChance = 0.0015; break;
+                        case 'professional': slipChance = 0.0025; break;
+                        case 'extreme': slipChance = 0.003; break;
+                    }
+                    
+                    if (Math.random() < slipChance) {
+                        this.claw.grabbedPrize.collected = false;
+                        this.claw.grabbedPrize = null;
+                        this.claw.isCarrying = false;
+                        this.gamePhase = 'positioning';
+                    }
+                }
+                
+                // Handle falling prizes
+                this.prizes.forEach(prize => {
+                    if (prize.falling) {
+                        prize.fallSpeed += 0.6;
+                        prize.y += prize.fallSpeed;
+                        
+                        if (prize.y + prize.height >= this.dropZone.y &&
+                            prize.x + prize.width/2 >= this.dropZone.x &&
+                            prize.x + prize.width/2 <= this.dropZone.x + this.dropZone.width) {
+                            
+                            prize.falling = false;
+                            this.collectPrize(prize);
+                        }
+                        
+                        if (prize.y > this.canvas.height) {
+                            prize.falling = false;
+                            prize.collected = false;
+                        }
+                    }
+                });
+            }
+            
+            updateWind() {
+                if (!this.windLocked) {
+                    this.windChangeTimer++;
+                    if (this.windChangeTimer > 100) {
+                        this.windDirection = Math.random() < 0.5 ? -1 : 1;
+                        this.windStrength = Math.random() * 2.5;
+                        this.windChangeTimer = 0;
+                    }
+                }
+                
+                this.clawSway = Math.sin(Date.now() * 0.004) * this.windStrength * 0.6;
+            }
+            
+            checkPrizeGrab() {
+                let grabTolerance;
+                switch(this.difficulty) {
+                    case 'casual': grabTolerance = 20; break;
+                    case 'professional': grabTolerance = 16; break;
+                    case 'extreme': grabTolerance = 14; break;
+                }
+                
+                for (let prize of this.prizes) {
+                    if (!prize.collected && !prize.falling) {
+                        const clawCenterX = this.claw.x;
+                        const clawCenterY = this.claw.y + this.claw.height;
+                        const prizeCenterX = prize.x + prize.width / 2;
+                        const prizeCenterY = prize.y + prize.height / 2;
+                        
+                        const distanceX = Math.abs(clawCenterX - prizeCenterX);
+                        const distanceY = Math.abs(clawCenterY - prizeCenterY);
+                        
+                        if (distanceX <= grabTolerance && distanceY <= grabTolerance) {
+                            let successRate;
+                            switch(this.difficulty) {
+                                case 'casual': successRate = 0.7; break;
+                                case 'professional': successRate = 0.5; break;
+                                case 'extreme': successRate = 0.3; break;
+                            }
+                            
+                            if (distanceX <= 5 && distanceY <= 5) {
+                                successRate += 0.3;
+                            }
+                            
+                            successRate *= prize.weight;
+                            const sizeModifier = (prize.width * prize.height) / 2500;
+                            successRate *= Math.max(0.3, sizeModifier);
+                            
+                            if (Math.random() < successRate) {
+                                this.claw.grabbedPrize = prize;
+                                prize.collected = true;
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            collectPrize(prize) {
+                this.collectedPrizes.push(prize);
+                this.prizesWon++;
+                this.updateStats();
+                this.updatePrizeDisplay();
+                
+                if (this.prizesWon === this.prizes.length) {
+                    setTimeout(() => {
+                        alert('🎉 AMAZING! You collected all the prizes! Happy Birthday! 🎂✨');
+                    }, 100);
+                }
+            }
+            
+            updateStats() {
+                document.getElementById('credits').textContent = this.credits;
+                document.getElementById('prizesWon').textContent = this.prizesWon;
+                
+                if (this.credits === 0 && this.prizesWon < this.prizes.length) {
+                    setTimeout(() => {
+                        if (confirm('Out of credits! Want to play again? 🎮')) {
+                            this.resetGame();
+                        }
+                    }, 1000);
+                }
+            }
+            
+            updatePrizeDisplay() {
+                const container = document.getElementById('collectedPrizes');
+                container.innerHTML = '';
+                
+                this.collectedPrizes.forEach(prize => {
+                    const prizeDiv = document.createElement('div');
+                    prizeDiv.style.cssText = `
+                        width: 40px; height: 40px; 
+                        background: ${prize.color}; 
+                        border: 2px solid white; 
+                        border-radius: 5px; 
+                        display: flex; 
+                        align-items: center; 
+                        justify-content: center; 
+                        font-size: 20px;
+                    `;
+                    prizeDiv.textContent = prize.emoji;
+                    prizeDiv.title = prize.name;
+                    container.appendChild(prizeDiv);
+                });
+            }
+            
+            resetGame() {
+                this.credits = 10;
+                this.prizesWon = 0;
+                this.collectedPrizes = [];
+                this.claw.x = 400;
+                this.claw.y = 80;
+                this.claw.isDropping = false;
+                this.claw.isGrabbing = false;
+                this.claw.isReturning = false;
+                this.claw.isCarrying = false;
+                this.claw.grabbedPrize = null;
+                this.gamePhase = 'positioning';
+                this.windLocked = false;
+                this.windDirection = 0;
+                this.windStrength = 0;
+                this.windChangeTimer = 0;
+                this.clawSway = 0;
+                
+                this.prizes.forEach(prize => {
+                    prize.collected = false;
+                    prize.falling = false;
+                    prize.fallSpeed = 0;
+                });
+                
+                this.updateStats();
+                this.updatePrizeDisplay();
+            }
+            
+            draw() {
+                try {
+                    // Clear canvas with bright background to make sure it's working
+                    this.ctx.fillStyle = '#87CEEB';
+                    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                    
+                    // Draw floor
+                    this.ctx.fillStyle = '#8B4513';
+                    this.ctx.fillRect(0, this.canvas.height - 40, this.canvas.width, 40);
+                    
+                    // Draw bucket - LARGE and VISIBLE
+                    this.ctx.fillStyle = this.gamePhase === 'carrying' ? '#00FF00' : '#8B4513';
+                    this.ctx.fillRect(this.dropZone.x, this.dropZone.y, this.dropZone.width, this.dropZone.height);
+                    
+                    // Bucket rim
+                    this.ctx.fillStyle = '#FFD700';
+                    this.ctx.fillRect(this.dropZone.x - 10, this.dropZone.y - 10, this.dropZone.width + 20, 15);
+                    
+                    // Bucket outline
+                    this.ctx.strokeStyle = '#000000';
+                    this.ctx.lineWidth = 4;
+                    this.ctx.strokeRect(this.dropZone.x, this.dropZone.y, this.dropZone.width, this.dropZone.height);
+                    
+                    // Bucket text - LARGE
+                    this.ctx.fillStyle = 'white';
+                    this.ctx.font = 'bold 20px Arial';
+                    this.ctx.textAlign = 'center';
+                    this.ctx.fillText('PRIZE', this.dropZone.x + this.dropZone.width/2, this.dropZone.y + 30);
+                    this.ctx.fillText('BUCKET', this.dropZone.x + this.dropZone.width/2, this.dropZone.y + 55);
+                    
+                    // Draw ALL prizes - LARGE and VISIBLE
+                    this.prizes.forEach(prize => {
+                        if (!prize.collected) {
+                            // Prize shadow
+                            this.ctx.fillStyle = 'rgba(0,0,0,0.4)';
+                            this.ctx.fillRect(prize.x + 3, prize.y + 3, prize.width, prize.height);
+                            
+                            // Prize body - SOLID COLOR
+                            this.ctx.fillStyle = prize.color;
+                            this.ctx.fillRect(prize.x, prize.y, prize.width, prize.height);
+                            
+                            // Prize outline
+                            this.ctx.strokeStyle = '#000000';
+                            this.ctx.lineWidth = 2;
+                            this.ctx.strokeRect(prize.x, prize.y, prize.width, prize.height);
+                            
+                            // Prize emoji - LARGE
+                            this.ctx.fillStyle = 'black';
+                            this.ctx.font = '28px Arial';
+                            this.ctx.textAlign = 'center';
+                            this.ctx.fillText(prize.emoji, prize.x + prize.width/2, prize.y + prize.height/2 + 10);
+                            
+                            // Weight indicators
+                            if (this.difficulty === 'professional' || this.difficulty === 'extreme') {
+                                this.ctx.font = '12px Arial';
+                                this.ctx.fillStyle = prize.weight > 0.7 ? '#00FF00' : prize.weight > 0.4 ? '#FFFF00' : '#FF0000';
+                                this.ctx.fillText(`${Math.round(prize.weight*100)}%`, prize.x + prize.width/2, prize.y - 8);
+                            }
+                        }
+                    });
+                    
+                    // Draw claw cable - THICK and VISIBLE
+                    this.ctx.strokeStyle = '#333333';
+                    this.ctx.lineWidth = 6;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(this.claw.x, 0);
+                    this.ctx.lineTo(this.claw.x, this.claw.y);
+                    this.ctx.stroke();
+                    
+                    // Draw claw - LARGE and VISIBLE
+                    this.ctx.fillStyle = this.claw.isGrabbing ? '#FF4444' : '#FFD700';
+                    this.ctx.strokeStyle = '#000000';
+                    this.ctx.lineWidth = 3;
+                    
+                    // Claw main body - BIGGER
+                    this.ctx.fillRect(this.claw.x - 40, this.claw.y, 80, 25);
+                    this.ctx.strokeRect(this.claw.x - 40, this.claw.y, 80, 25);
+                    
+                    // Left claw arm - BIGGER
+                    this.ctx.fillRect(this.claw.x - 25, this.claw.y + 25, 15, 30);
+                    this.ctx.strokeRect(this.claw.x - 25, this.claw.y + 25, 15, 30);
+                    
+                    // Right claw arm - BIGGER  
+                    this.ctx.fillRect(this.claw.x + 10, this.claw.y + 25, 15, 30);
+                    this.ctx.strokeRect(this.claw.x + 10, this.claw.y + 25, 15, 30);
+                    
+                    // Draw carried prize
+                    if (this.claw.grabbedPrize && (this.claw.isReturning || this.claw.isCarrying)) {
+                        const prize = this.claw.grabbedPrize;
+                        this.ctx.fillStyle = prize.color;
+                        this.ctx.fillRect(prize.x, prize.y, prize.width, prize.height);
+                        this.ctx.strokeStyle = '#000000';
+                        this.ctx.lineWidth = 2;
+                        this.ctx.strokeRect(prize.x, prize.y, prize.width, prize.height);
+                        this.ctx.fillStyle = 'black';
+                        this.ctx.font = '28px Arial';
+                        this.ctx.textAlign = 'center';
+                        this.ctx.fillText(prize.emoji, prize.x + prize.width/2, prize.y + prize.height/2 + 10);
+                    }
+                    
+                    // Wind indicator - VERY VISIBLE
+                    if ((this.difficulty === 'professional' || this.difficulty === 'extreme') && this.windStrength > 0) {
+                        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.9)';
+                        this.ctx.fillRect(10, 10, 220, 70);
+                        this.ctx.strokeStyle = '#FFD700';
+                        this.ctx.lineWidth = 4;
+                        this.ctx.strokeRect(10, 10, 220, 70);
+                        
+                        // Wind direction
+                        this.ctx.fillStyle = '#FFD700';
+                        this.ctx.font = 'bold 24px Arial';
+                        this.ctx.textAlign = 'left';
+                        let arrows = this.windDirection > 0 ? '→→→' : '←←←';
+                        this.ctx.fillText(`💨 ${arrows}`, 20, 40);
+                        
+                        // Wind intensity
+                        let intensity = Math.round((this.windStrength / 2.5) * 100);
+                        this.ctx.fillStyle = intensity > 75 ? '#FF0000' : intensity > 50 ? '#FFA500' : '#90EE90';
+                        this.ctx.font = 'bold 20px Arial';
+                        this.ctx.fillText(`${intensity}%`, 20, 65);
+                        
+                        if (this.difficulty === 'professional' && this.windLocked) {
+                            this.ctx.fillStyle = '#FF6B6B';
+                            this.ctx.font = 'bold 18px Arial';
+                            this.ctx.fillText('🔒 LOCKED', 130, 50);
+                        }
+                    }
+                    
+                    // Phase indicator - LARGE
+                    this.ctx.fillStyle = 'rgba(0,0,0,0.8)';
+                    this.ctx.fillRect(10, this.canvas.height - 60, 500, 40);
+                    this.ctx.fillStyle = 'white';
+                    this.ctx.font = 'bold 18px Arial';
+                    this.ctx.textAlign = 'left';
+                    let phaseText = '';
+                    switch(this.gamePhase) {
+                        case 'positioning': phaseText = '🎯 Use arrows to move, SPACE to drop'; break;
+                        case 'dropping': phaseText = '⬇️ Press SPACE to grab when over a prize!'; break;
+                        case 'carrying': phaseText = '📦 Move over BUCKET and press SPACE to drop!'; break;
+                    }
+                    this.ctx.fillText(phaseText, 20, this.canvas.height - 35);
+                    
+                } catch (error) {
+                    console.error("Draw error:", error);
+                }
+            }
+            
+            gameLoop() {
+                try {
+                    this.update();
+                    this.draw();
+                    requestAnimationFrame(() => this.gameLoop());
+                } catch (error) {
+                    console.error("Game loop error:", error);
+                }
+            }
+        }
+        
+        // Initialize game when page loads
+        window.addEventListener('load', () => {
+            console.log("Page loaded, starting game...");
+            try {
+                new ClawMachineGame();
+            } catch (error) {
+                console.error("Failed to start game:", error);
+            }
+        });
+        
+        console.log("Script loaded successfully");
+    </script>
+</body>
+</html>
