@@ -270,8 +270,8 @@
             
             createPrizes() {
                 this.prizes = [
-                    { x: 100, y: 450, width: 45, height: 45, color: '#FF69B4', emoji: '🎂', name: 'Birthday Cake', collected: false, weight: 0.8, falling: false, fallSpeed: 0 },
-                    { x: 200, y: 440, width: 50, height: 50, color: '#FFD700', emoji: '🎈', name: 'Balloon', collected: false, weight: 0.3, falling: false, fallSpeed: 0 },
+                    { x: 100, y: 450, width: 45, height: 45, color: '#FF69B4', image: 'Spencer.png', name: 'Birthday Cake', collected: false, weight: 0.8, falling: false, fallSpeed: 0 },
+                    { x: 200, y: 440, width: 50, height: 50, color: '#FFD700', image: 'Francesca.PNG', name: 'Balloon', collected: false, weight: 0.3, falling: false, fallSpeed: 0 },
                     { x: 300, y: 460, width: 45, height: 45, color: '#FF6347', emoji: '🎁', name: 'Present', collected: false, weight: 0.9, falling: false, fallSpeed: 0 },
                     { x: 400, y: 450, width: 50, height: 50, color: '#98FB98', emoji: '🌟', name: 'Star', collected: false, weight: 0.6, falling: false, fallSpeed: 0 },
                     { x: 500, y: 440, width: 45, height: 45, color: '#DDA0DD', emoji: '💝', name: 'Love', collected: false, weight: 0.7, falling: false, fallSpeed: 0 },
