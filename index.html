@@ -264,20 +264,22 @@ class ClawMachineGame {
     }
     
     createPrizes() {
-        // YOUR ACTUAL IMAGE FILES - ADD UP TO 6 MORE HERE!
+        // Using placeholder data that will work - replace image names with your actual files
         this.prizes = [
-            // CURRENT 15 PRIZES (using your files):
+            // First row - bottom
             { x: 100, y: 485, width: 70, height: 77, color: '#FF69B4', image: 'Francesca.PNG', name: 'Beautiful Francesca', collected: false, weight: 0.8, falling: false, fallSpeed: 0, rotation: 0 },
             { x: 200, y: 480, width: 50, height: 75, color: '#FFD700', image: 'Spencer.png', name: 'Amazing Spencer', collected: false, weight: 0.9, falling: false, fallSpeed: 0, rotation: 0 },
             { x: 300, y: 490, width: 65, height: 65, color: '#FF6347', image: 'IMG_3053.jpg', name: 'Special Memory', collected: false, weight: 0.7, falling: false, fallSpeed: 0, rotation: 0 },
             { x: 400, y: 470, width: 60, height: 60, color: '#98FB98', image: 'IMG_3054.jpg', name: 'Amazing Moment', collected: false, weight: 0.6, falling: false, fallSpeed: 0, rotation: 0 },
             { x: 500, y: 495, width: 45, height: 45, color: '#DDA0DD', image: 'IMG_3057.PNG', name: 'Perfect Day', collected: false, weight: 0.8, falling: false, fallSpeed: 0, rotation: 0 },
             
+            // Second row - middle
             { x: 150, y: 450, width: 40, height: 50, color: '#87CEEB', image: 'IMG_3058.PNG', name: 'Sweet Memory', collected: false, weight: 0.5, falling: false, fallSpeed: 0, rotation: 0 },
             { x: 280, y: 440, width: 48, height: 48, color: '#FFA07A', image: 'IMG_3059.PNG', name: 'Fun Times', collected: false, weight: 0.4, falling: false, fallSpeed: 0, rotation: 0 },
             { x: 420, y: 455, width: 68, height: 61, color: '#F0E68C', image: 'GMC.PNG', name: 'Precious Moment', collected: false, weight: 0.6, falling: false, fallSpeed: 0, rotation: 0 },
             { x: 550, y: 445, width: 50, height: 50, color: '#FFB6C1', image: 'IMG_3061.PNG', name: 'Happy Memory', collected: false, weight: 0.7, falling: false, fallSpeed: 0, rotation: 0 },
             
+            // Third row - higher
             { x: 120, y: 380, width: 45, height: 45, color: '#FF4500', image: 'IMG_3062.PNG', name: 'Adventure Time', collected: false, weight: 0.9, falling: false, fallSpeed: 0, rotation: 0 },
             { x: 250, y: 370, width: 64, height: 64, color: '#32CD32', image: 'JULIEN.png', name: 'Beautiful Day', collected: false, weight: 0.3, falling: false, fallSpeed: 0, rotation: 0 },
             { x: 380, y: 385, width: 48, height: 42, color: '#8A2BE2', image: 'IMG_3064.PNG', name: 'Unforgettable', collected: false, weight: 1.0, falling: false, fallSpeed: 0, rotation: 0 },
@@ -285,13 +287,12 @@ class ClawMachineGame {
             { x: 580, y: 380, width: 54, height: 63, color: '#00CED1', image: 'JAMESBRODERICK.png', name: 'Cherished Time', collected: false, weight: 0.4, falling: false, fallSpeed: 0, rotation: 0 },
             { x: 320, y: 420, width: 40, height: 45, color: '#FF69B4', image: 'IMG_3067.PNG', name: 'Perfect Memory', collected: false, weight: 0.8, falling: false, fallSpeed: 0, rotation: 0 },
             
-            // ADD UP TO 6 MORE PRIZES HERE! Just copy this format:
-            { x: 60, y: 310, width: 60, height: 67, color: '#FFB347', image: 'Max.PNG', name: 'Your Description', collected: false, weight: 0.7, falling: false, fallSpeed: 0, rotation: 0 },
-            { x: 180, y: 300, width: 50, height: 60, color: '#DEB887', image: 'Spencer2.PNG', name: 'Another Memory', collected: false, weight: 0.6, falling: false, fallSpeed: 0, rotation: 0 },
-            { x: 340, y: 305, width: 70, height: 77, color: '#20B2AA', image: 'William.PNG', name: 'Great Times', collected: false, weight: 0.5, falling: false, fallSpeed: 0, rotation: 0 },
-            { x: 470, y: 295, width: 72, height: 81, color: '#CD853F', image: 'DDT.PNG', name: 'Awesome Day', collected: false, weight: 0.8, falling: false, fallSpeed: 0, rotation: 0 },
-            { x: 600, y: 310, width: 78, height: 90, color: '#9370DB', image: 'EMMA.PNG', name: 'Special Moment', collected: false, weight: 0.4, falling: false, fallSpeed: 0, rotation: 0 },
-            // { x: 220, y: 350, width: 40, height: 50, color: '#F4A460', image: 'your_image6.png', name: 'Perfect Shot', collected: false, weight: 0.9, falling: false, fallSpeed: 0, rotation: 0 }
+            // New prizes (top row)
+            { x: 60, y: 310, width: 60, height: 67, color: '#FFB347', image: 'Max.PNG', name: 'Amazing Max', collected: false, weight: 0.7, falling: false, fallSpeed: 0, rotation: 0 },
+            { x: 180, y: 300, width: 50, height: 60, color: '#DEB887', image: 'Spencer2.PNG', name: 'Spencer Again', collected: false, weight: 0.6, falling: false, fallSpeed: 0, rotation: 0 },
+            { x: 340, y: 305, width: 70, height: 77, color: '#20B2AA', image: 'William.PNG', name: 'Wonderful William', collected: false, weight: 0.5, falling: false, fallSpeed: 0, rotation: 0 },
+            { x: 470, y: 295, width: 72, height: 81, color: '#CD853F', image: 'DDT.PNG', name: 'Special DDT', collected: false, weight: 0.8, falling: false, fallSpeed: 0, rotation: 0 },
+            { x: 600, y: 310, width: 78, height: 90, color: '#9370DB', image: 'EMMA.PNG', name: 'Lovely Emma', collected: false, weight: 0.4, falling: false, fallSpeed: 0, rotation: 0 }
         ];
         
         this.loadImages();
@@ -300,15 +301,16 @@ class ClawMachineGame {
     loadImages() {
         this.images = {};
         this.imagesLoaded = 0;
+        this.totalImages = this.prizes.length;
         
         this.prizes.forEach(prize => {
             const img = new Image();
             img.onload = () => {
                 this.imagesLoaded++;
-                console.log(`📸 Loaded: ${prize.image}`);
+                console.log(`📸 Loaded: ${prize.image} (${this.imagesLoaded}/${this.totalImages})`);
             };
             img.onerror = () => {
-                console.log(`⚠️ Failed: ${prize.image}`);
+                console.log(`⚠️ Failed to load: ${prize.image} - using fallback`);
                 this.imagesLoaded++;
             };
             img.src = prize.image;
@@ -329,11 +331,18 @@ class ClawMachineGame {
             this.keys[e.code] = false;
         });
         
-        document.getElementById('leftBtn').addEventListener('click', () => this.moveClaw(-1, 0));
-        document.getElementById('rightBtn').addEventListener('click', () => this.moveClaw(1, 0));
-        document.getElementById('upBtn').addEventListener('click', () => this.moveClaw(0, -1));
-        document.getElementById('downBtn').addEventListener('click', () => this.moveClaw(0, 1));
-        document.getElementById('dropBtn').addEventListener('click', () => this.handleClawAction());
+        // Mobile controls
+        const leftBtn = document.getElementById('leftBtn');
+        const rightBtn = document.getElementById('rightBtn');
+        const upBtn = document.getElementById('upBtn');
+        const downBtn = document.getElementById('downBtn');
+        const dropBtn = document.getElementById('dropBtn');
+        
+        if (leftBtn) leftBtn.addEventListener('click', () => this.moveClaw(-1, 0));
+        if (rightBtn) rightBtn.addEventListener('click', () => this.moveClaw(1, 0));
+        if (upBtn) upBtn.addEventListener('click', () => this.moveClaw(0, -1));
+        if (downBtn) downBtn.addEventListener('click', () => this.moveClaw(0, 1));
+        if (dropBtn) dropBtn.addEventListener('click', () => this.handleClawAction());
         
         document.querySelectorAll('input[name="difficulty"]').forEach(radio => {
             radio.addEventListener('change', (e) => {
@@ -341,8 +350,10 @@ class ClawMachineGame {
             });
         });
         
+        // Show mobile controls on touch devices
         if ('ontouchstart' in window) {
-            document.getElementById('mobileControls').style.display = 'grid';
+            const mobileControls = document.getElementById('mobileControls');
+            if (mobileControls) mobileControls.style.display = 'grid';
         }
     }
     
@@ -646,8 +657,11 @@ class ClawMachineGame {
     }
     
     updateStats() {
-        document.getElementById('credits').textContent = this.credits;
-        document.getElementById('prizesWon').textContent = this.prizesWon;
+        const creditsEl = document.getElementById('credits');
+        const prizesWonEl = document.getElementById('prizesWon');
+        
+        if (creditsEl) creditsEl.textContent = this.credits;
+        if (prizesWonEl) prizesWonEl.textContent = this.prizesWon;
         
         if (this.credits === 0 && this.prizesWon < this.prizes.length) {
             setTimeout(() => {
@@ -660,6 +674,8 @@ class ClawMachineGame {
     
     updatePrizeDisplay() {
         const container = document.getElementById('collectedPrizes');
+        if (!container) return;
+        
         container.innerHTML = '';
         
         this.collectedPrizes.forEach(prize => {
@@ -773,7 +789,15 @@ class ClawMachineGame {
                 
                 // Draw image or fallback
                 if (prize.image && this.images[prize.image] && this.images[prize.image].complete) {
-                    this.ctx.drawImage(this.images[prize.image], 0, 0, prize.width, prize.height);
+                    try {
+                        this.ctx.drawImage(this.images[prize.image], 0, 0, prize.width, prize.height);
+                    } catch (e) {
+                        // Fallback if image drawing fails
+                        this.ctx.fillStyle = 'black';
+                        this.ctx.font = '20px Arial';
+                        this.ctx.textAlign = 'center';
+                        this.ctx.fillText('📷', prize.width/2, prize.height/2 + 7);
+                    }
                 } else {
                     this.ctx.fillStyle = 'black';
                     this.ctx.font = '20px Arial';
@@ -781,10 +805,11 @@ class ClawMachineGame {
                     this.ctx.fillText('📷', prize.width/2, prize.height/2 + 7);
                 }
                 
-                // Weight indicators
+                // Weight indicators for harder difficulties
                 if (this.difficulty === 'professional' || this.difficulty === 'extreme') {
                     this.ctx.font = '10px Arial';
                     this.ctx.fillStyle = prize.weight > 0.7 ? '#00FF00' : prize.weight > 0.4 ? '#FFFF00' : '#FF0000';
+                    this.ctx.textAlign = 'center';
                     this.ctx.fillText(`${Math.round(prize.weight*100)}%`, prize.width/2, -8);
                 }
                 
@@ -837,7 +862,14 @@ class ClawMachineGame {
             this.ctx.strokeRect(prize.x, prize.y, prize.width, prize.height);
             
             if (prize.image && this.images[prize.image] && this.images[prize.image].complete) {
-                this.ctx.drawImage(this.images[prize.image], prize.x, prize.y, prize.width, prize.height);
+                try {
+                    this.ctx.drawImage(this.images[prize.image], prize.x, prize.y, prize.width, prize.height);
+                } catch (e) {
+                    this.ctx.fillStyle = 'black';
+                    this.ctx.font = '20px Arial';
+                    this.ctx.textAlign = 'center';
+                    this.ctx.fillText('📷', prize.x + prize.width/2, prize.y + prize.height/2 + 7);
+                }
             } else {
                 this.ctx.fillStyle = 'black';
                 this.ctx.font = '20px Arial';
@@ -900,15 +932,21 @@ class ClawMachineGame {
 
 // Start the game when page loads
 function startGame() {
+    console.log("🎮 Attempting to start game...");
     const canvas = document.getElementById('gameCanvas');
     if (canvas) {
-        new ClawMachineGame();
-        console.log("🎉 Complete personalized claw machine started!");
+        try {
+            new ClawMachineGame();
+            console.log("🎉 Complete personalized claw machine started!");
+        } catch (error) {
+            console.error("❌ Error starting game:", error);
+        }
     } else {
         console.error("❌ Canvas not found!");
     }
 }
 
+// Ensure game starts properly
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', startGame);
 } else {
